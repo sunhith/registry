@@ -12,27 +12,42 @@ spring:
     # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
     active: #spring.profiles.active#
     include: composite
+  #  cloud:
+  #    config:
+  #      server:
+  #        bootstrap: true
+  #        fail-on-composite-error: false
+  #        composite:
+  #          - type: native
+  #            search-locations: file:./central-config
+  #          - type: vault
+  #            kv-version: 2
+  #            backend: secret
+  #            default-key: application
+  #            profile-separator: '/'
+  #        vault:
+  #          authentication: token
+  #          host: localhost
+  #          port: 8200
+  #          scheme: http
+  #          skip-ssl-validation: true
+  #          timeout: 5
+  #          token: jhipster-registry # In server mode, provide a token having read access on secrets
+  #        prefix: /config
   cloud:
     config:
       server:
         bootstrap: true
-        fail-on-composite-error: false
         composite:
-          - type: native
-            search-locations: file:./central-config
-          - type: vault
-            kv-version: 2
-            backend: secret
-            default-key: application
-            profile-separator: '/'
-        vault:
-          authentication: token
-          host: localhost
-          port: 8200
-          scheme: http
-          skip-ssl-validation: true
-          timeout: 5
-          token: jhipster-registry # In server mode, provide a token having read access on secrets
+          - type: git
+            uri: https://github.com/sunhith/jhipster-registry-config.git
+            # By default, the JGit library used by Spring Cloud Config Server uses SSH configuration files
+            # such as ~/.ssh/known_hosts and /etc/ssh/ssh_config when connecting to Git repositories by using an SSH URI.
+            # In cloud environments such as Cloud Foundry/Docker the local filesystem may be ephemeral or not easily accessible.
+            # For those cases, SSH configuration can be set by using Java properties. In order to activate property-based SSH configuration,
+            # the ignoreLocalSshSettings property must be set to true, and privateKey (usually, in github, it's a deploy key) should pasted here.
+            # ignore-local-ssh-settings: true
+            # private-key: # https://cloud.spring.io/spring-cloud-config/multi/multi__spring_cloud_config_server.html#_git_ssh_configuration_using_properties
         prefix: /config
       fail-fast: true
       # name of the config server's property source (file.yml) that we want to use
